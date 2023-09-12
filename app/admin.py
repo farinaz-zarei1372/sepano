@@ -1,10 +1,23 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from .models import User
 
-from .models import Usermodel
 
-
-@admin.register(Usermodel)
-class ContactAdmin(admin.ModelAdmin):
-    list_display = ('username', 'phonenumber', 'gender', 'birthdate')
+@admin.register(User)
+class ContactAdmin(UserAdmin):
+    fields = ['username', 'password', 'phonenumber', 'gender', 'birthdate', 'is_admin', 'is_active', 'is_shop_owner',
+              'is_staff']
+    fieldsets = None
+    add_fieldsets = (
+        (
+            None,
+            {
+                "fields": ("phonenumber", "password1", "password2"),
+            },
+        ),
+    )
+    list_filter = ("gender", "is_shop_owner",)
+    filter_horizontal = []
+    list_display = ('phonenumber', 'gender', 'birthdate')
 
 # Register your models here.

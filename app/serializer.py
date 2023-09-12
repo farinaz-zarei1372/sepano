@@ -1,36 +1,28 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
-
-from .models import Usermodel
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('username',)
+from .models import User
 
 
 class SignupUser(serializers.ModelSerializer):
-    # user = UserSerializer(many=True)
 
     def create(self, validated_data):
-        validated_data["password"] = validated_data.get("password")
+        validated_data["password"] = make_password(validated_data.get("password"))
         return super(SignupUser, self).create(validated_data)
 
     class Meta:
-        model = Usermodel
+        model = User
         fields = '__all__'
 
 
 class LoginUser(serializers.ModelSerializer):
-    phonenumber = serializers.IntegerField()
+    phonenumber = serializers.CharField()
 
     class Meta:
-        model = Usermodel
+        model = User
         fields = ['phonenumber', 'password']
 
 
 class ListUser(serializers.ModelSerializer):
     class Meta:
-        model = Usermodel
+        model = User
         fields = '__all__'
